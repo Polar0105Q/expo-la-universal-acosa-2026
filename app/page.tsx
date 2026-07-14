@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Registro | ACOSA EXPO Xela 2026",
-  description: "Formulario de registro para asistir a ACOSA EXPO Xela 2026.",
+  title: "Registro | EXPO La Universal ACOSA 2026",
+  description:
+    "Formulario de registro para asistir a EXPO La Universal ACOSA 2026.",
 };
 
 const formEmail = "callcenter14@acosa.com.hn";
@@ -22,7 +23,7 @@ export default function Home() {
   return (
     <main className="expo-page">
       <section className="registration-shell" aria-labelledby="expo-title">
-        <aside className="promo-panel" aria-label="ACOSA EXPO 2026">
+        <aside className="promo-panel" aria-label="EXPO La Universal ACOSA 2026">
           <div className="grain" />
           <div className="promo-content">
             <div className="expo-mark">
@@ -60,13 +61,13 @@ export default function Home() {
             src="/brand-lockup.png"
             alt="La Universal | ACOSA"
           />
-          <h1 id="expo-title">ACOSA EXPO Xela 2026</h1>
+          <h1 id="expo-title">EXPO La Universal ACOSA 2026</h1>
 
           <form action={formAction} method="POST" className="expo-form">
             <input
               type="hidden"
               name="_subject"
-              value="Nuevo registro ACOSA EXPO Xela 2026"
+              value="Nuevo registro EXPO La Universal ACOSA 2026"
             />
             <input type="hidden" name="_captcha" value="false" />
             <input type="hidden" name="_template" value="table" />
@@ -108,8 +109,8 @@ export default function Home() {
                 <option value="" disabled>
                   Selecciona una de las opciones disponibles
                 </option>
-                <option>Día 1 - ACOSA EXPO Xela 2026</option>
-                <option>Día 2 - ACOSA EXPO Xela 2026</option>
+                <option>Día 1 - EXPO La Universal ACOSA 2026</option>
+                <option>Día 2 - EXPO La Universal ACOSA 2026</option>
                 <option>Ambos días</option>
               </select>
             </label>

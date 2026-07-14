@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ACOSA EXPO Xela 2026",
-  description: "Formulario de registro para ACOSA EXPO Xela 2026.",
+  title: "EXPO La Universal ACOSA 2026",
+  description: "Formulario de registro para EXPO La Universal ACOSA 2026.",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",
