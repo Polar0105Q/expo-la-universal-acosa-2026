@@ -24,32 +24,20 @@ export default function Home() {
     <main className="expo-page">
       <section className="registration-shell" aria-labelledby="expo-title">
         <aside className="promo-panel" aria-label="EXPO La Universal ACOSA 2026">
-          <div className="grain" />
           <div className="promo-content">
-            <div className="expo-mark">
-              <span className="ring" aria-hidden="true" />
-              <span>expo</span>
-              <strong>2026</strong>
-            </div>
-            <div className="icon-row" aria-hidden="true">
-              <span>+</span>
-              <span>[]</span>
-              <span>o</span>
-            </div>
-            <div className="surprise-copy">
-              <span>¡NUEVAS</span>
-              <strong>SORPRESAS!</strong>
-            </div>
-            <div className="divider-row" aria-hidden="true">
-              <span>+</span>
-              <span>[]</span>
-              <span>o</span>
-              <i />
-            </div>
-            <p>¡NO TE LO PIERDAS!</p>
+            <img
+              className="expo-naming"
+              src="/expo-naming-pc.webp"
+              alt="Expo 2026"
+            />
+            <img
+              className="expo-copy"
+              src="/expo-copy-pc.webp"
+              alt="Nuevas sorpresas"
+            />
             <img
               className="side-logo"
-              src="/brand-lockup.png"
+              src="/logos-web.png"
               alt="La Universal | ACOSA"
             />
           </div>
@@ -57,8 +45,13 @@ export default function Home() {
 
         <section className="form-panel">
           <img
+            className="mobile-expo-title"
+            src="/expo-title-mobile.webp"
+            alt="Expo 2026"
+          />
+          <img
             className="top-logo"
-            src="/brand-lockup.png"
+            src="/logos-form.png"
             alt="La Universal | ACOSA"
           />
           <h1 id="expo-title">EXPO La Universal ACOSA 2026</h1>
@@ -145,7 +138,6 @@ export default function Home() {
 
             <button type="submit">ENVIAR</button>
           </form>
-
         </section>
       </section>
     </main>
