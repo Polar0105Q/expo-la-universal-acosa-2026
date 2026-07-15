@@ -27,8 +27,14 @@ function brandedShell({ eyebrow, title, body }) {
             <td align="center">
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:640px;background:#ffffff;border-radius:18px;overflow:hidden;box-shadow:0 18px 45px rgba(17,24,39,.12);">
                 <tr>
-                  <td style="background:#ff5a13;padding:24px 28px;text-align:center;">
-                    <img src="${SITE_URL}/logos-form.png" alt="La Universal | ACOSA" width="360" style="display:block;max-width:100%;height:auto;margin:0 auto;background:#ffffff;border-radius:10px;padding:8px 12px;" />
+                  <td style="background:#ff5a13;padding:22px 28px;text-align:center;">
+                    <table role="presentation" cellspacing="0" cellpadding="0" width="100%" style="max-width:500px;margin:0 auto;background:#ffffff;border-radius:10px;">
+                      <tr>
+                        <td style="padding:14px 18px;text-align:center;">
+                          <img src="${SITE_URL}/logos-web.png" alt="La Universal | ACOSA" width="460" style="display:block;width:100%;max-width:460px;height:auto;margin:0 auto;" />
+                        </td>
+                      </tr>
+                    </table>
                   </td>
                 </tr>
                 <tr>
