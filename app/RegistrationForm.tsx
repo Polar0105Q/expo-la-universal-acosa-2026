@@ -78,6 +78,8 @@ function formatPhone(value: string) {
 export function RegistrationForm() {
   const [phone, setPhone] = useState("");
   const [phoneError, setPhoneError] = useState("");
+  const [submitError, setSubmitError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -89,23 +91,30 @@ export function RegistrationForm() {
     }
 
     setPhoneError("");
+    setSubmitError("");
+    setIsSubmitting(true);
 
     const formData = new FormData(event.currentTarget);
     formData.set("Teléfono / WhatsApp", `+505 ${formatPhone(phoneDigits)}`);
 
-    await fetch("/__forms.html", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams(formData as unknown as URLSearchParams).toString(),
-    });
+    try {
+      const response = await fetch("/api/send-registration-emails", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(Object.fromEntries(formData.entries())),
+      });
 
-    await fetch("/.netlify/functions/send-registration-emails", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(Object.fromEntries(formData.entries())),
-    });
+      if (!response.ok) {
+        throw new Error("No se pudo enviar el registro.");
+      }
 
-    window.location.href = "/gracias";
+      window.location.href = "/gracias";
+    } catch {
+      setSubmitError(
+        "No pudimos enviar el registro. Intenta nuevamente en unos segundos.",
+      );
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -246,8 +255,10 @@ export function RegistrationForm() {
         ))}
       </fieldset>
 
-      <button type="submit">
-        <span>ENVIAR REGISTRO</span>
+      {submitError ? <p className="submit-error">{submitError}</p> : null}
+
+      <button type="submit" disabled={isSubmitting}>
+        <span>{isSubmitting ? "ENVIANDO..." : "ENVIAR REGISTRO"}</span>
         <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
           <path d="M1 8h11.2L8.6 4.4 10 3l6 5-6 5-1.4-1.4 3.6-3.6H1V8Z" />
         </svg>

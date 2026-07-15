@@ -1,14 +1,18 @@
+import { NextResponse } from "next/server";
+
 const BREVO_ENDPOINT = "https://api.brevo.com/v3/smtp/email";
 const SITE_URL =
   process.env.SITE_URL || "https://expo-la-universal-acosa-2026.acosa.online";
 
-function field(data, name) {
+type RegistrationData = Record<string, string | string[] | undefined>;
+
+function field(data: RegistrationData, name: string) {
   const value = data[name];
   if (Array.isArray(value)) return value.join(", ");
   return typeof value === "string" ? value : "";
 }
 
-function escapeHtml(value) {
+function escapeHtml(value: string) {
   return String(value)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
@@ -17,7 +21,15 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-function brandedShell({ eyebrow, title, body }) {
+function brandedShell({
+  eyebrow,
+  title,
+  body,
+}: {
+  eyebrow: string;
+  title: string;
+  body: string;
+}) {
   return `
     <!doctype html>
     <html>
@@ -63,7 +75,7 @@ function brandedShell({ eyebrow, title, body }) {
   `;
 }
 
-function dataRows(data) {
+function dataRows(data: RegistrationData) {
   const labels = [
     ["Nombre y Apellido", "Nombre y Apellido"],
     ["Nombre de Empresa", "Nombre de Empresa"],
@@ -88,10 +100,10 @@ function dataRows(data) {
     .join("");
 }
 
-function customerTemplate(customerName) {
+function customerTemplate(customerName: string) {
   return brandedShell({
     eyebrow: "Registro confirmado",
-    title: "¡Gracias por registrarte!",
+    title: "Gracias por registrarte",
     body: `
       <p style="margin:0 0 16px;color:#374151;font-size:16px;line-height:1.55;">
         Hola <strong>${escapeHtml(customerName)}</strong>, hemos recibido tus datos correctamente para
@@ -101,14 +113,14 @@ function customerTemplate(customerName) {
         Nuestro equipo revisará tu registro y pronto se pondrá en contacto contigo si necesitamos confirmar información adicional.
       </p>
       <div style="border-left:5px solid #ff5a13;background:#fff7ed;border-radius:10px;padding:16px 18px;">
-        <p style="margin:0;color:#111827;font-size:15px;line-height:1.45;font-weight:700;">¡No te lo pierdas!</p>
+        <p style="margin:0;color:#111827;font-size:15px;line-height:1.45;font-weight:700;">No te lo pierdas</p>
         <p style="margin:6px 0 0;color:#4b5563;font-size:14px;line-height:1.45;">Te esperamos para conocer nuevas sorpresas y soluciones para tu negocio.</p>
       </div>
     `,
   });
 }
 
-function internalTemplate(data) {
+function internalTemplate(data: RegistrationData) {
   return brandedShell({
     eyebrow: "Nuevo lead recibido",
     title: "Nuevo registro para EXPO La Universal ACOSA 2026",
@@ -120,18 +132,18 @@ function internalTemplate(data) {
         ${dataRows(data)}
       </table>
       <p style="margin:18px 0 0;color:#6b7280;font-size:13px;line-height:1.45;">
-        Tip: puedes responder este correo para contactar al cliente directamente.
+        Puedes responder este correo para contactar al cliente directamente.
       </p>
     `,
   });
 }
 
-async function sendBrevoEmail(payload) {
+async function sendBrevoEmail(payload: unknown) {
   const response = await fetch(BREVO_ENDPOINT, {
     method: "POST",
     headers: {
       accept: "application/json",
-      "api-key": process.env.BREVO_API_KEY,
+      "api-key": process.env.BREVO_API_KEY || "",
       "content-type": "application/json",
     },
     body: JSON.stringify(payload),
@@ -141,22 +153,19 @@ async function sendBrevoEmail(payload) {
     const errorText = await response.text();
     throw new Error(`Brevo error ${response.status}: ${errorText}`);
   }
-
-  return response.json();
 }
 
-exports.handler = async (event) => {
-  if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method not allowed" };
-  }
-
+export async function POST(request: Request) {
   if (!process.env.BREVO_API_KEY) {
-    return { statusCode: 500, body: "Missing BREVO_API_KEY" };
+    return NextResponse.json({ error: "Missing BREVO_API_KEY" }, { status: 500 });
   }
 
   const senderEmail = process.env.BREVO_SENDER_EMAIL;
   if (!senderEmail) {
-    return { statusCode: 500, body: "Missing BREVO_SENDER_EMAIL" };
+    return NextResponse.json(
+      { error: "Missing BREVO_SENDER_EMAIL" },
+      { status: 500 },
+    );
   }
 
   const senderName =
@@ -167,12 +176,15 @@ exports.handler = async (event) => {
     .filter(Boolean);
 
   try {
-    const data = JSON.parse(event.body || "{}");
+    const data = (await request.json()) as RegistrationData;
     const customerEmail = field(data, "email");
     const customerName = field(data, "Nombre y Apellido") || "Cliente";
 
     if (!customerEmail) {
-      return { statusCode: 400, body: "Missing customer email" };
+      return NextResponse.json(
+        { error: "Missing customer email" },
+        { status: 400 },
+      );
     }
 
     const sender = { name: senderName, email: senderEmail };
@@ -197,9 +209,12 @@ exports.handler = async (event) => {
       });
     }
 
-    return { statusCode: 200, body: JSON.stringify({ ok: true }) };
+    return NextResponse.json({ ok: true });
   } catch (error) {
     console.error(error);
-    return { statusCode: 500, body: "Email delivery failed" };
+    return NextResponse.json(
+      { error: "Email delivery failed" },
+      { status: 500 },
+    );
   }
-};
+}
