@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import "@fontsource-variable/montserrat";
+import "@fontsource-variable/space-grotesk";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -16,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
+    <html lang="es" suppressHydrationWarning>
       <body>{children}</body>
     </html>
   );

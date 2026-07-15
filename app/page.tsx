@@ -42,7 +42,18 @@ export default function Home() {
             src="/logos-form.png"
             alt="La Universal | ACOSA"
           />
-          <h1 id="expo-title">EXPO La Universal ACOSA 2026</h1>
+          <div className="form-heading">
+            <p>Registro oficial</p>
+            <h1 id="expo-title">EXPO La Universal ACOSA 2026</h1>
+            <span>
+              Completa tus datos y recibe la confirmación en tu correo.
+            </span>
+          </div>
+          <div className="form-badges" aria-label="Categorías principales">
+            <span>Tecnología</span>
+            <span>Escolares</span>
+            <span>Oficina</span>
+          </div>
 
           <RegistrationForm />
         </section>

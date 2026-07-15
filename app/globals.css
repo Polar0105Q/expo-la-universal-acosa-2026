@@ -7,6 +7,8 @@
   --orange-dark: #e63d00;
   --muted: #626a78;
   --line: #d4d7dd;
+  --ink: #06111f;
+  --soft-orange: #fff1e8;
 }
 
 @theme inline {
@@ -24,28 +26,28 @@ body {
   margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Montserrat Variable", "Montserrat", "Segoe UI", Arial, Helvetica, sans-serif;
 }
 
 .expo-page {
   min-height: 100vh;
   display: grid;
   place-items: center;
-  padding: 32px;
+  padding: 24px;
   background:
     radial-gradient(circle at 18% 22%, rgba(255, 90, 19, 0.12), transparent 26%),
     linear-gradient(135deg, #ffffff 0%, #f6f6f3 46%, #ededeb 100%);
 }
 
 .registration-shell {
-  width: min(1080px, 100%);
-  min-height: 610px;
+  width: min(1120px, 100%);
+  min-height: 600px;
   display: grid;
   grid-template-columns: 300px 1fr;
   overflow: hidden;
-  border-radius: 16px;
+  border-radius: 18px;
   background: #ffffff;
-  box-shadow: 0 20px 55px rgba(8, 16, 31, 0.12);
+  box-shadow: 0 28px 70px rgba(8, 16, 31, 0.14);
 }
 
 .promo-panel {
@@ -61,8 +63,8 @@ body {
   display: grid;
   grid-template-rows: auto 1fr auto;
   align-items: center;
-  gap: 28px;
-  padding: 54px 26px 32px;
+  gap: 22px;
+  padding: 48px 26px 24px;
 }
 
 .expo-naming,
@@ -91,33 +93,82 @@ body {
 .form-panel {
   display: flex;
   flex-direction: column;
-  padding: 30px 56px 38px;
+  padding: 26px 56px 30px;
 }
 
 .top-logo {
   display: block;
-  width: min(350px, 100%);
-  margin: 0 auto 54px;
+  width: min(330px, 100%);
+  margin: 0 auto 30px;
 }
 
 .mobile-expo-title {
   display: none;
 }
 
-h1 {
-  margin: 0 0 24px;
+.form-heading {
   text-align: center;
-  font-size: clamp(28px, 4vw, 32px);
+  margin: 0 auto 12px;
+}
+
+.form-heading p {
+  width: fit-content;
+  margin: 0 auto 10px;
+  padding: 5px 12px;
+  border: 1px solid rgba(255, 90, 19, 0.32);
+  border-radius: 999px;
+  background: var(--soft-orange);
+  color: var(--orange-dark);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  text-align: center;
+  color: var(--ink);
+  font-family: "Space Grotesk Variable", "Montserrat Variable", Arial, sans-serif;
+  font-size: clamp(34px, 4vw, 40px);
   line-height: 1.1;
   font-weight: 900;
+  letter-spacing: 0;
+}
+
+.form-heading > span {
+  display: block;
+  margin-top: 9px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.form-badges {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 auto 18px;
+}
+
+.form-badges span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 0 11px;
+  border-radius: 999px;
+  background: #111827;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
 }
 
 .expo-form {
-  width: min(100%, 650px);
+  width: min(100%, 670px);
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 18px 12px;
+  gap: 14px 12px;
   align-items: start;
 }
 
@@ -141,10 +192,24 @@ h1 {
 .expo-form label span,
 .categories legend {
   display: block;
-  margin-bottom: 8px;
-  font-size: 16px;
+  margin-bottom: 7px;
+  font-size: 13px;
   line-height: 1.25;
-  font-weight: 500;
+  font-weight: 780;
+  color: #111827;
+}
+
+.field-label {
+  display: flex !important;
+  align-items: center;
+  gap: 7px;
+}
+
+.field-icon {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
+  fill: var(--orange);
 }
 
 .expo-form b {
@@ -154,13 +219,14 @@ h1 {
 input,
 select {
   width: 100%;
-  min-height: 38px;
-  border: 1px solid var(--line);
-  border-radius: 5px;
-  background: #ffffff;
+  min-height: 42px;
+  border: 1px solid #d8dde7;
+  border-radius: 9px;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfcff 100%);
   color: #151923;
   font-size: 14px;
-  padding: 8px 11px;
+  padding: 9px 12px;
+  box-shadow: 0 1px 0 rgba(8, 16, 31, 0.03);
 }
 
 select {
@@ -170,11 +236,12 @@ select {
 
 .phone-input {
   display: flex;
-  min-height: 38px;
+  min-height: 42px;
   overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 5px;
-  background: #ffffff;
+  border: 1px solid #d8dde7;
+  border-radius: 9px;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfcff 100%);
+  box-shadow: 0 1px 0 rgba(8, 16, 31, 0.03);
 }
 
 .phone-input:focus-within {
@@ -185,18 +252,19 @@ select {
 .phone-input strong {
   display: inline-flex;
   align-items: center;
-  padding: 0 10px;
-  border-right: 1px solid var(--line);
-  background: #f3f4f6;
+  padding: 0 12px;
+  border-right: 1px solid #d8dde7;
+  background: var(--soft-orange);
   color: #151923;
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 900;
 }
 
 .phone-input input {
-  min-height: 36px;
+  min-height: 40px;
   border: 0;
   border-radius: 0;
+  box-shadow: none;
 }
 
 .phone-input input:focus {
@@ -207,10 +275,10 @@ select {
 .field-help,
 .field-error {
   display: block;
-  margin-top: 6px;
+  margin-top: 7px;
   font-size: 12px;
   line-height: 1.3;
-  min-height: 31px;
+  min-height: 25px;
 }
 
 .field-help {
@@ -241,20 +309,47 @@ select:focus {
 .categories {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 4px 14px;
+  gap: 8px 10px;
 }
 
 .categories legend {
   grid-column: 1 / -1;
+  margin-bottom: 2px;
+}
+
+.categories legend span {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.categories legend small {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
 }
 
 .check-option {
-  width: fit-content;
+  width: 100%;
+  min-height: 38px;
   display: flex;
   align-items: center;
   gap: 8px;
-  margin: 4px 0;
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid #e3e7ef;
+  border-radius: 9px;
+  background: #ffffff;
   cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.check-option:hover {
+  border-color: rgba(255, 90, 19, 0.55);
+  background: #fff8f4;
+  transform: translateY(-1px);
 }
 
 .check-option input {
@@ -266,28 +361,46 @@ select:focus {
 
 .check-option span {
   margin: 0;
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 700;
 }
 
 button {
-  width: 96px;
-  min-height: 44px;
-  grid-column: 1 / 3;
-  margin-top: 6px;
+  width: fit-content;
+  min-height: 48px;
+  grid-column: 1 / 4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px;
   border: 2px solid #111111;
   border-radius: 999px;
   background: var(--orange);
   color: #ffffff;
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 900;
   letter-spacing: 0;
+  padding: 0 20px;
   cursor: pointer;
   transition: background 160ms ease, transform 160ms ease;
+  box-shadow: 0 8px 0 #111111;
+}
+
+button svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
 }
 
 button:hover {
   background: var(--orange-dark);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(2px);
+  box-shadow: 0 4px 0 #111111;
 }
 
 .thanks-page {
@@ -409,14 +522,19 @@ button:hover {
     display: none;
   }
 
+  .form-heading,
+  .form-badges {
+    display: none;
+  }
+
   .expo-form {
     order: 2;
     grid-template-columns: 1fr;
     gap: 18px;
-    width: min(100%, 292px);
+    width: min(100%, 310px);
     margin: 0 auto;
-    padding: 26px 18px 28px;
-    border-radius: 14px;
+    padding: 26px 18px 30px;
+    border-radius: 16px;
     background: rgba(255, 247, 243, 0.95);
     box-shadow: 0 18px 42px rgba(8, 16, 31, 0.16);
   }
@@ -434,15 +552,16 @@ button:hover {
 
   .expo-form label span,
   .categories legend {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   input,
   select {
-    min-height: 35px;
+    min-height: 39px;
   }
 
   button {
     width: 100%;
+    box-shadow: 0 6px 0 #111111;
   }
 }
