@@ -37,6 +37,36 @@ function splitEmails(value: string) {
     .filter(Boolean);
 }
 
+function leadPayload(data: RegistrationData) {
+  return {
+    timestamp: new Date().toISOString(),
+    nombre: field(data, "Nombre y Apellido"),
+    empresa: field(data, "Nombre de Empresa"),
+    email: field(data, "email"),
+    telefono: field(data, "Teléfono / WhatsApp"),
+    ubicacion: field(data, "Ubicación de Negocio"),
+    fecha: field(data, "Fecha de asistencia"),
+    asistentes: field(data, "Cantidad de asistentes"),
+    categorias: field(data, "Categoría de interés"),
+  };
+}
+
+async function saveLead(data: RegistrationData) {
+  const webhookUrl = envValue("LEADS_WEBHOOK_URL", "GOOGLE_SHEETS_WEBHOOK_URL");
+  if (!webhookUrl) return;
+
+  const response = await fetch(webhookUrl, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(leadPayload(data)),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Lead webhook error ${response.status}: ${errorText}`);
+  }
+}
+
 function brandedShell({
   eyebrow,
   title,
@@ -214,6 +244,12 @@ export async function POST(request: Request) {
     }
 
     const sender = { name: senderName, email: senderEmail };
+
+    try {
+      await saveLead(data);
+    } catch (error) {
+      console.error("Lead backup failed", error);
+    }
 
     await sendBrevoEmail({
       sender,
