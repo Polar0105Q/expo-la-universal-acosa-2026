@@ -35,8 +35,15 @@ function setupSheet() {
     .setFontWeight('bold')
     .setBackground('#ff5a13')
     .setFontColor('#ffffff');
+  sheet.getRange('E:E').setNumberFormat('@');
   sheet.setFrozenRows(1);
   sheet.autoResizeColumns(1, HEADERS.length);
+}
+
+function asText(value) {
+  if (value === null || value === undefined) return '';
+  const text = String(value);
+  return /^[=+\-@]/.test(text) ? "'" + text : text;
 }
 
 function doPost(e) {
@@ -53,17 +60,23 @@ function doPost(e) {
       sheet.setFrozenRows(1);
     }
 
-    sheet.appendRow([
+    sheet.getRange('E:E').setNumberFormat('@');
+
+    const nextRow = sheet.getLastRow() + 1;
+    const row = [
       new Date(),
-      data.nombre || '',
-      data.empresa || '',
-      data.email || '',
-      data.telefono || '',
-      data.ubicacion || '',
-      data.fecha || '',
-      data.asistentes || '',
-      data.categorias || ''
-    ]);
+      asText(data.nombre || data.fullName),
+      asText(data.empresa || data.companyName),
+      asText(data.email),
+      asText(data.telefono || data.phone),
+      asText(data.ubicacion || data.businessLocation),
+      asText(data.fecha || data.attendanceDate),
+      asText(data.asistentes || data.attendeeCount),
+      asText(data.categorias || data.interestCategories)
+    ];
+
+    sheet.getRange(nextRow, 1, 1, row.length).setValues([row]);
+    sheet.autoResizeColumns(1, HEADERS.length);
 
     return ContentService
       .createTextOutput(JSON.stringify({ ok: true }))
