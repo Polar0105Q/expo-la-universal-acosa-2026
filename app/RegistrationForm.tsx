@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 const categories = [
   "Tecnología",
   "Escolares",
@@ -10,11 +12,29 @@ const categories = [
   "Todos",
 ];
 
+function formatPhone(value: string) {
+  const digits = value.replace(/\D/g, "").slice(0, 8);
+  return digits.length > 4 ? `${digits.slice(0, 4)} ${digits.slice(4)}` : digits;
+}
+
 export function RegistrationForm() {
+  const [phone, setPhone] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
+    const phoneDigits = phone.replace(/\D/g, "");
+    if (phoneDigits.length !== 8) {
+      setPhoneError("Escribe los 8 dígitos del número. Ejemplo: 8888 8888.");
+      return;
+    }
+
+    setPhoneError("");
+
     const formData = new FormData(event.currentTarget);
+    formData.set("Teléfono / WhatsApp", `+505 ${formatPhone(phoneDigits)}`);
+
     await fetch("/__forms.html", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -30,6 +50,7 @@ export function RegistrationForm() {
       method="POST"
       className="expo-form"
       onSubmit={handleSubmit}
+      noValidate
     >
       <input type="hidden" name="form-name" value="registro-expo" />
       <p className="hidden-field">
@@ -66,20 +87,31 @@ export function RegistrationForm() {
         />
       </label>
 
-      <label>
+      <label className="phone-field">
         <span>
-          Teléfono / WhatsApp Nicaragua <b>*</b>
+          Teléfono / WhatsApp <b>*</b>
         </span>
-        <input
-          name="Teléfono / WhatsApp"
-          type="tel"
-          inputMode="tel"
-          autoComplete="tel"
-          placeholder="+505 8888 8888"
-          pattern="^(\\+505\\s?)?\\d{4}\\s?\\d{4}$"
-          title="Ingresa un número de Nicaragua de 8 dígitos, con o sin +505."
-          required
-        />
+        <div className="phone-input">
+          <strong>+505</strong>
+          <input
+            name="Teléfono / WhatsApp"
+            type="tel"
+            inputMode="numeric"
+            autoComplete="tel"
+            placeholder="8888 8888"
+            value={phone}
+            onChange={(event) => {
+              setPhone(formatPhone(event.target.value));
+              if (phoneError) setPhoneError("");
+            }}
+            aria-describedby="phone-help"
+            aria-invalid={phoneError ? "true" : "false"}
+            required
+          />
+        </div>
+        <small id="phone-help" className={phoneError ? "field-error" : "field-help"}>
+          {phoneError || "Escribe solo los 8 dígitos de Nicaragua."}
+        </small>
       </label>
 
       <label>
