@@ -16,8 +16,8 @@ export const metadata: Metadata = {
   title: "EXPO La Universal ACOSA 2026",
   description: "Formulario de registro para EXPO La Universal ACOSA 2026.",
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
+    icon: "/favicon-white.png",
+    shortcut: "/favicon-white.png",
   },
 };
 
