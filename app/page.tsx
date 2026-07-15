@@ -6,9 +6,6 @@ export const metadata: Metadata = {
     "Formulario de registro para asistir a EXPO La Universal ACOSA 2026.",
 };
 
-const formEmail = "callcenter14@acosa.com.hn";
-const formAction = `https://formsubmit.co/${formEmail}`;
-
 const categories = [
   "Tecnología",
   "Escolares",
@@ -56,14 +53,21 @@ export default function Home() {
           />
           <h1 id="expo-title">EXPO La Universal ACOSA 2026</h1>
 
-          <form action={formAction} method="POST" className="expo-form">
-            <input
-              type="hidden"
-              name="_subject"
-              value="Nuevo registro EXPO La Universal ACOSA 2026"
-            />
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="_template" value="table" />
+          <form
+            name="registro-expo"
+            action="/gracias"
+            method="POST"
+            data-netlify="true"
+            netlify-honeypot="bot-field"
+            className="expo-form"
+          >
+            <input type="hidden" name="form-name" value="registro-expo" />
+            <p className="hidden-field">
+              <label>
+                No llenar
+                <input name="bot-field" />
+              </label>
+            </p>
 
             <label>
               <span>
