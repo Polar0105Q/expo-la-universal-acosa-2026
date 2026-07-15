@@ -21,6 +21,22 @@ function escapeHtml(value: string) {
     .replaceAll("'", "&#039;");
 }
 
+function envValue(...names: string[]) {
+  for (const name of names) {
+    const value = process.env[name];
+    if (value) return value;
+  }
+
+  return "";
+}
+
+function splitEmails(value: string) {
+  return value
+    .split(/[,\n;]+/)
+    .map((email) => email.trim())
+    .filter(Boolean);
+}
+
 function brandedShell({
   eyebrow,
   title,
@@ -139,11 +155,13 @@ function internalTemplate(data: RegistrationData) {
 }
 
 async function sendBrevoEmail(payload: unknown) {
+  const brevoApiKey = envValue("BREVO_API_KEY", "CLAVE_API_BREVO");
+
   const response = await fetch(BREVO_ENDPOINT, {
     method: "POST",
     headers: {
       accept: "application/json",
-      "api-key": process.env.BREVO_API_KEY || "",
+      "api-key": brevoApiKey,
       "content-type": "application/json",
     },
     body: JSON.stringify(payload),
@@ -156,24 +174,32 @@ async function sendBrevoEmail(payload: unknown) {
 }
 
 export async function POST(request: Request) {
-  if (!process.env.BREVO_API_KEY) {
-    return NextResponse.json({ error: "Missing BREVO_API_KEY" }, { status: 500 });
+  const brevoApiKey = envValue("BREVO_API_KEY", "CLAVE_API_BREVO");
+  if (!brevoApiKey) {
+    return NextResponse.json(
+      { error: "Missing BREVO_API_KEY / CLAVE_API_BREVO" },
+      { status: 500 },
+    );
   }
 
-  const senderEmail = process.env.BREVO_SENDER_EMAIL;
+  const senderEmail = envValue(
+    "BREVO_SENDER_EMAIL",
+    "CORREO_REMITENTE_BREVO",
+    "CORREO_ELECTRONICO_DEL_REMITENTE_DE_BREVO",
+  );
   if (!senderEmail) {
     return NextResponse.json(
-      { error: "Missing BREVO_SENDER_EMAIL" },
+      { error: "Missing BREVO_SENDER_EMAIL / CORREO_REMITENTE_BREVO" },
       { status: 500 },
     );
   }
 
   const senderName =
-    process.env.BREVO_SENDER_NAME || "EXPO La Universal ACOSA 2026";
-  const internalRecipients = (process.env.INTERNAL_RECIPIENTS || "")
-    .split(",")
-    .map((email) => email.trim())
-    .filter(Boolean);
+    envValue("BREVO_SENDER_NAME", "NOMBRE_DEL_REMITENTE_BREVO") ||
+    "EXPO La Universal ACOSA 2026";
+  const internalRecipients = splitEmails(
+    envValue("INTERNAL_RECIPIENTS", "DESTINATARIOS_INTERNOS"),
+  );
 
   try {
     const data = (await request.json()) as RegistrationData;
