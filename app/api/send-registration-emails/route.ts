@@ -225,14 +225,20 @@ export async function POST(request: Request) {
     });
 
     if (internalRecipients.length > 0) {
-      await sendBrevoEmail({
-        sender,
-        to: internalRecipients.map((email) => ({ email })),
-        subject: "Nuevo registro | EXPO La Universal ACOSA 2026",
-        htmlContent: internalTemplate(data),
-        replyTo: { email: customerEmail, name: customerName },
-        tags: ["expo-2026", "registro-interno"],
-      });
+      try {
+        await sendBrevoEmail({
+          sender,
+          to: internalRecipients.map((email) => ({ email })),
+          subject: "Nuevo registro | EXPO La Universal ACOSA 2026",
+          htmlContent: internalTemplate(data),
+          tags: ["expo-2026", "registro-interno"],
+        });
+      } catch (error) {
+        console.error("Internal notification failed", {
+          recipients: internalRecipients,
+          error,
+        });
+      }
     }
 
     return NextResponse.json({ ok: true });
