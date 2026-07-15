@@ -84,6 +84,35 @@ export default function Home() {
             </label>
 
             <label>
+              <span>
+                Correo electrónico <b>*</b>
+              </span>
+              <input
+                name="email"
+                type="email"
+                autoComplete="email"
+                placeholder="correo@empresa.com"
+                required
+              />
+            </label>
+
+            <label>
+              <span>
+                Teléfono / WhatsApp Nicaragua <b>*</b>
+              </span>
+              <input
+                name="Teléfono / WhatsApp"
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                placeholder="+505 8888 8888"
+                pattern="^(\\+505\\s?)?\\d{4}\\s?\\d{4}$"
+                title="Ingresa un número de Nicaragua de 8 dígitos, con o sin +505."
+                required
+              />
+            </label>
+
+            <label>
               <span>Ubicación de Negocio</span>
               <select name="Ubicación de Negocio" defaultValue="">
                 <option value="" disabled>
