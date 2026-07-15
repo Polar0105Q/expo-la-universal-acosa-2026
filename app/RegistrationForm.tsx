@@ -12,6 +12,27 @@ const categories = [
   "Todos",
 ];
 
+const businessLocations = [
+  "Managua",
+  "Masaya",
+  "Granada",
+  "Carazo",
+  "Rivas",
+  "León",
+  "Chinandega",
+  "Matagalpa",
+  "Estelí",
+  "Jinotega",
+  "Nueva Segovia",
+  "Madriz",
+  "Boaco",
+  "Chontales",
+  "Río San Juan",
+  "Costa Caribe Norte",
+  "Costa Caribe Sur",
+  "Otra ubicación",
+];
+
 function formatPhone(value: string) {
   const digits = value.replace(/\D/g, "").slice(0, 8);
   return digits.length > 4 ? `${digits.slice(0, 4)} ${digits.slice(4)}` : digits;
@@ -66,21 +87,21 @@ export function RegistrationForm() {
         </label>
       </p>
 
-      <label>
+      <label className="form-field">
         <span>
           Nombre y Apellido <b>*</b>
         </span>
         <input name="Nombre y Apellido" type="text" required />
       </label>
 
-      <label>
+      <label className="form-field">
         <span>
           Nombre de Empresa <b>*</b>
         </span>
         <input name="Nombre de Empresa" type="text" required />
       </label>
 
-      <label>
+      <label className="form-field">
         <span>
           Correo electrónico <b>*</b>
         </span>
@@ -93,7 +114,7 @@ export function RegistrationForm() {
         />
       </label>
 
-      <label className="phone-field">
+      <label className="form-field phone-field">
         <span>
           Teléfono / WhatsApp <b>*</b>
         </span>
@@ -120,22 +141,19 @@ export function RegistrationForm() {
         </small>
       </label>
 
-      <label>
+      <label className="form-field">
         <span>Ubicación de Negocio</span>
         <select name="Ubicación de Negocio" defaultValue="">
           <option value="" disabled>
             Selecciona una de las opciones disponibles
           </option>
-          <option>Xela / Quetzaltenango</option>
-          <option>Guatemala</option>
-          <option>Huehuetenango</option>
-          <option>San Marcos</option>
-          <option>Retalhuleu</option>
-          <option>Otra ubicación</option>
+          {businessLocations.map((location) => (
+            <option key={location}>{location}</option>
+          ))}
         </select>
       </label>
 
-      <label>
+      <label className="form-field">
         <span>
           Selecciona la fecha que deseas asistir <b>*</b>
         </span>
@@ -149,7 +167,7 @@ export function RegistrationForm() {
         </select>
       </label>
 
-      <label>
+      <label className="form-field">
         <span>¿Cuántas personas asistirán?</span>
         <select name="Cantidad de asistentes" defaultValue="">
           <option value="" disabled>
