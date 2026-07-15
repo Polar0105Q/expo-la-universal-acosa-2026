@@ -12,6 +12,15 @@ function field(data: RegistrationData, name: string) {
   return typeof value === "string" ? value : "";
 }
 
+function firstField(data: RegistrationData, names: string[]) {
+  for (const name of names) {
+    const value = field(data, name);
+    if (value) return value;
+  }
+
+  return "";
+}
+
 function escapeHtml(value: string) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -55,10 +64,48 @@ async function saveLead(data: RegistrationData) {
   const webhookUrl = envValue("LEADS_WEBHOOK_URL", "GOOGLE_SHEETS_WEBHOOK_URL");
   if (!webhookUrl) return;
 
+  const timestamp = new Date().toISOString();
+  const fullName = field(data, "Nombre y Apellido");
+  const companyName = field(data, "Nombre de Empresa");
+  const email = field(data, "email");
+  const phone = firstField(data, [
+    "Teléfono / WhatsApp",
+    "TelÃ©fono / WhatsApp",
+  ]);
+  const businessLocation = firstField(data, [
+    "Ubicación de Negocio",
+    "UbicaciÃ³n de Negocio",
+  ]);
+  const attendanceDate = field(data, "Fecha de asistencia");
+  const attendeeCount = field(data, "Cantidad de asistentes");
+  const interestCategories = firstField(data, [
+    "Categoría de interés",
+    "CategorÃ­a de interÃ©s",
+  ]);
+  const payload = {
+    timestamp,
+    submittedAt: timestamp,
+    nombre: fullName,
+    fullName,
+    empresa: companyName,
+    companyName,
+    email,
+    telefono: phone,
+    phone,
+    ubicacion: businessLocation,
+    businessLocation,
+    fecha: attendanceDate,
+    attendanceDate,
+    asistentes: attendeeCount,
+    attendeeCount,
+    categorias: interestCategories,
+    interestCategories,
+  };
+
   const response = await fetch(webhookUrl, {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify(leadPayload(data)),
+    body: JSON.stringify(payload),
   });
 
   if (!response.ok) {
