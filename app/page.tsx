@@ -39,7 +39,7 @@ export default function Home() {
           />
           <img
             className="top-logo"
-            src="/logos-form.png"
+            src="/logos-web.png"
             alt="La Universal | ACOSA"
           />
           <div className="form-heading">

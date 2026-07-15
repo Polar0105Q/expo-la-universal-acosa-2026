@@ -168,7 +168,7 @@ h1 {
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 14px 12px;
+  gap: 11px 12px;
   align-items: start;
 }
 
@@ -183,6 +183,9 @@ h1 {
 
 .form-field {
   grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .categories {
@@ -192,6 +195,7 @@ h1 {
 .expo-form label span,
 .categories legend {
   display: block;
+  min-height: 24px;
   margin-bottom: 7px;
   font-size: 13px;
   line-height: 1.25;
@@ -206,10 +210,15 @@ h1 {
 }
 
 .field-icon {
-  width: 17px;
-  height: 17px;
-  flex: 0 0 17px;
-  fill: var(--orange);
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  padding: 4px;
+  border-radius: 6px;
+  background: var(--orange);
+  color: #ffffff;
+  fill: currentColor;
+  box-shadow: 0 3px 0 #111827;
 }
 
 .expo-form b {
@@ -301,6 +310,7 @@ select:focus {
 }
 
 .categories {
+  min-height: auto;
   margin: 0;
   padding: 0;
   border: 0;
@@ -309,7 +319,7 @@ select:focus {
 .categories {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px 10px;
+  gap: 6px 10px;
 }
 
 .categories legend {
@@ -333,12 +343,12 @@ select:focus {
 
 .check-option {
   width: 100%;
-  min-height: 38px;
+  min-height: 32px;
   display: flex;
   align-items: center;
   gap: 8px;
   margin: 0;
-  padding: 8px 10px;
+  padding: 6px 10px;
   border: 1px solid #e3e7ef;
   border-radius: 9px;
   background: #ffffff;
@@ -373,7 +383,7 @@ button {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  margin-top: 8px;
+  margin-top: 0;
   border: 2px solid #111111;
   border-radius: 999px;
   background: var(--orange);
