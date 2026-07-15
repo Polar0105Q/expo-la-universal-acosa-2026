@@ -1,4 +1,6 @@
 const BREVO_ENDPOINT = "https://api.brevo.com/v3/smtp/email";
+const SITE_URL =
+  process.env.SITE_URL || "https://expo-la-universal-acosa-2026.acosa.online";
 
 function field(data, name) {
   const value = data[name];
@@ -15,25 +17,107 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-function rows(data) {
+function brandedShell({ eyebrow, title, body }) {
+  return `
+    <!doctype html>
+    <html>
+      <body style="margin:0;padding:0;background:#f4f1ed;font-family:Arial,Helvetica,sans-serif;color:#111827;">
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f4f1ed;padding:28px 14px;">
+          <tr>
+            <td align="center">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:640px;background:#ffffff;border-radius:18px;overflow:hidden;box-shadow:0 18px 45px rgba(17,24,39,.12);">
+                <tr>
+                  <td style="background:#ff5a13;padding:24px 28px;text-align:center;">
+                    <img src="${SITE_URL}/logos-form.png" alt="La Universal | ACOSA" width="360" style="display:block;max-width:100%;height:auto;margin:0 auto;background:#ffffff;border-radius:10px;padding:8px 12px;" />
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:34px 34px 10px;">
+                    <p style="margin:0 0 10px;color:#ff5a13;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;">${escapeHtml(eyebrow)}</p>
+                    <h1 style="margin:0;color:#071226;font-size:28px;line-height:1.15;font-weight:900;">${escapeHtml(title)}</h1>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:18px 34px 34px;">
+                    ${body}
+                  </td>
+                </tr>
+                <tr>
+                  <td style="background:#111827;padding:18px 28px;text-align:center;">
+                    <p style="margin:0;color:#ffffff;font-size:13px;font-weight:700;">EXPO La Universal ACOSA 2026</p>
+                    <p style="margin:6px 0 0;color:#d1d5db;font-size:12px;">Tecnología, escolares, oficina, sublimación, gaming y más.</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+    </html>
+  `;
+}
+
+function dataRows(data) {
   const labels = [
-    "Nombre y Apellido",
-    "Nombre de Empresa",
-    "email",
-    "Teléfono / WhatsApp",
-    "Ubicación de Negocio",
-    "Fecha de asistencia",
-    "Cantidad de asistentes",
-    "Categoría de interés",
+    ["Nombre y Apellido", "Nombre y Apellido"],
+    ["Nombre de Empresa", "Nombre de Empresa"],
+    ["email", "Correo electrónico"],
+    ["Teléfono / WhatsApp", "Teléfono / WhatsApp"],
+    ["Ubicación de Negocio", "Ubicación de Negocio"],
+    ["Fecha de asistencia", "Fecha de asistencia"],
+    ["Cantidad de asistentes", "Cantidad de asistentes"],
+    ["Categoría de interés", "Categoría de interés"],
   ];
 
   return labels
-    .map((label) => {
-      const value = escapeHtml(field(data, label));
-      const displayLabel = label === "email" ? "Correo electrónico" : label;
-      return `<tr><th align="left" style="padding:10px;border-bottom:1px solid #eee;">${escapeHtml(displayLabel)}</th><td style="padding:10px;border-bottom:1px solid #eee;">${value || "-"}</td></tr>`;
+    .map(([key, label]) => {
+      const value = escapeHtml(field(data, key)) || "-";
+      return `
+        <tr>
+          <th align="left" style="width:42%;padding:12px 14px;background:#fff7ed;border-bottom:1px solid #f1e4dc;color:#374151;font-size:13px;line-height:1.35;">${escapeHtml(label)}</th>
+          <td style="padding:12px 14px;border-bottom:1px solid #f1e4dc;color:#111827;font-size:14px;line-height:1.35;">${value}</td>
+        </tr>
+      `;
     })
     .join("");
+}
+
+function customerTemplate(customerName) {
+  return brandedShell({
+    eyebrow: "Registro confirmado",
+    title: "¡Gracias por registrarte!",
+    body: `
+      <p style="margin:0 0 16px;color:#374151;font-size:16px;line-height:1.55;">
+        Hola <strong>${escapeHtml(customerName)}</strong>, hemos recibido tus datos correctamente para
+        <strong>EXPO La Universal ACOSA 2026</strong>.
+      </p>
+      <p style="margin:0 0 22px;color:#374151;font-size:16px;line-height:1.55;">
+        Nuestro equipo revisará tu registro y pronto se pondrá en contacto contigo si necesitamos confirmar información adicional.
+      </p>
+      <div style="border-left:5px solid #ff5a13;background:#fff7ed;border-radius:10px;padding:16px 18px;">
+        <p style="margin:0;color:#111827;font-size:15px;line-height:1.45;font-weight:700;">¡No te lo pierdas!</p>
+        <p style="margin:6px 0 0;color:#4b5563;font-size:14px;line-height:1.45;">Te esperamos para conocer nuevas sorpresas y soluciones para tu negocio.</p>
+      </div>
+    `,
+  });
+}
+
+function internalTemplate(data) {
+  return brandedShell({
+    eyebrow: "Nuevo lead recibido",
+    title: "Nuevo registro para EXPO La Universal ACOSA 2026",
+    body: `
+      <p style="margin:0 0 18px;color:#374151;font-size:15px;line-height:1.5;">
+        Se recibió un nuevo registro desde la landing. Estos son los datos capturados:
+      </p>
+      <table role="presentation" cellspacing="0" cellpadding="0" width="100%" style="border-collapse:collapse;border:1px solid #f1e4dc;border-radius:12px;overflow:hidden;">
+        ${dataRows(data)}
+      </table>
+      <p style="margin:18px 0 0;color:#6b7280;font-size:13px;line-height:1.45;">
+        Tip: puedes responder este correo para contactar al cliente directamente.
+      </p>
+    `,
+  });
 }
 
 async function sendBrevoEmail(payload) {
@@ -69,7 +153,8 @@ exports.handler = async (event) => {
     return { statusCode: 500, body: "Missing BREVO_SENDER_EMAIL" };
   }
 
-  const senderName = process.env.BREVO_SENDER_NAME || "EXPO La Universal ACOSA 2026";
+  const senderName =
+    process.env.BREVO_SENDER_NAME || "EXPO La Universal ACOSA 2026";
   const internalRecipients = (process.env.INTERNAL_RECIPIENTS || "")
     .split(",")
     .map((email) => email.trim())
@@ -86,39 +171,21 @@ exports.handler = async (event) => {
 
     const sender = { name: senderName, email: senderEmail };
 
-    const customerHtml = `
-      <div style="font-family:Arial,sans-serif;color:#101828;line-height:1.5;">
-        <h2 style="margin:0 0 12px;">Registro recibido</h2>
-        <p>Hola ${escapeHtml(customerName)}, gracias por registrarte a <strong>EXPO La Universal ACOSA 2026</strong>.</p>
-        <p>Hemos recibido tus datos correctamente. Pronto nos pondremos en contacto contigo.</p>
-        <p style="margin-top:24px;">La Universal | ACOSA</p>
-      </div>
-    `;
-
     await sendBrevoEmail({
       sender,
       to: [{ email: customerEmail, name: customerName }],
       subject: "Confirmación de registro | EXPO La Universal ACOSA 2026",
-      htmlContent: customerHtml,
+      htmlContent: customerTemplate(customerName),
       replyTo: sender,
       tags: ["expo-2026", "registro-cliente"],
     });
 
     if (internalRecipients.length > 0) {
-      const internalHtml = `
-        <div style="font-family:Arial,sans-serif;color:#101828;line-height:1.5;">
-          <h2 style="margin:0 0 12px;">Nuevo registro EXPO La Universal ACOSA 2026</h2>
-          <table cellspacing="0" cellpadding="0" style="border-collapse:collapse;width:100%;max-width:720px;">
-            ${rows(data)}
-          </table>
-        </div>
-      `;
-
       await sendBrevoEmail({
         sender,
         to: internalRecipients.map((email) => ({ email })),
         subject: "Nuevo registro | EXPO La Universal ACOSA 2026",
-        htmlContent: internalHtml,
+        htmlContent: internalTemplate(data),
         replyTo: { email: customerEmail, name: customerName },
         tags: ["expo-2026", "registro-interno"],
       });
