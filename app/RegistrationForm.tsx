@@ -41,6 +41,12 @@ export function RegistrationForm() {
       body: new URLSearchParams(formData as unknown as URLSearchParams).toString(),
     });
 
+    await fetch("/.netlify/functions/send-registration-emails", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(Object.fromEntries(formData.entries())),
+    });
+
     window.location.href = "/gracias";
   }
 
