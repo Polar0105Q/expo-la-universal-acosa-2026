@@ -58,10 +58,10 @@ body {
   position: relative;
   z-index: 1;
   min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 34px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  align-items: center;
+  gap: 28px;
   padding: 54px 26px 32px;
 }
 
@@ -75,7 +75,8 @@ body {
 
 .expo-copy {
   width: 90%;
-  margin: auto auto 0;
+  align-self: center;
+  margin: 0 auto;
 }
 
 .side-logo {
